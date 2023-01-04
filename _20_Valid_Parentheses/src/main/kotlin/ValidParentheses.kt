@@ -6,31 +6,27 @@ fun main(){
     println(isValid("{()}")) // true
     println(isValid("([)]")) // false
     println(isValid("([")) // false
+    println(isValid("[([]])")) //false
 }
-
 fun isValid(s: String): Boolean {
-    var (check1, check2, check3) = Triple(0, 0, 0)
-    val open = arrayOf('(', '[', '{')
-    val close = arrayOf(')', ']', '}')
-
     if (s.length%2 == 1) return false
 
+    val open = arrayOf('(', '[', '{')
+    val close = arrayOf(')', ']', '}')
+    val acumulador = arrayListOf<Char>()
+
     s.map{
-        when (it) {
-            '(' -> check1++
-            ')' -> check1--
-            '[' -> check2++
-            ']' -> check2--
-            '{' -> check3++
-            else -> check3--
-        }
-        if (check1 < 0 || check2 < 0 || check3 < 0) return false
-        if (it in open && (s.indexOf(it) < s.length - 1 &&
-            (s[s.indexOf(it)+1] in close &&
-            close.indexOf(s[s.indexOf(it)+1]) != open.indexOf(it)))){
-            return false
+        if(it in open){
+            acumulador.add(it)
+        } else {
+            if(acumulador.isEmpty()) return false
+            if(close.indexOf(it) != open.indexOf(acumulador.last())){
+                return false
+            } else {
+                acumulador.removeAt(acumulador.size - 1)
             }
+        }
     }
-    if (check1 == 0 && check2 == 0 && check3 == 0) return true
-    return false
+    if (acumulador.isNotEmpty()) return false
+    return true
 }
