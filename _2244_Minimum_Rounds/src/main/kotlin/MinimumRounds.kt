@@ -11,58 +11,30 @@ fun minimumRounds(tasks: IntArray): Int {
 
     var index = 0
     val acumulador = arrayListOf<Int>()
+    val acumulador2 = arrayListOf<Int>()
     var rounds = 0
     val listaOrdenada = tasks.sorted()
 
+
     listaOrdenada.forEach {
-        index ++
-        if (acumulador.isEmpty() || it == acumulador.first()) acumulador.add(it)
+        index++
+        acumulador.add(it)
+        if(it != acumulador.first() || index == listaOrdenada.size){
 
-        if (it > acumulador.first() || index == listaOrdenada.size){
-            if(acumulador.size == 1) return -1
-            when (acumulador.size % 3) {
-                    0 -> rounds += acumulador.size / 3
-                    1 -> rounds += (acumulador.size + 2) / 3
-                    2 -> rounds += (acumulador.size + 1) / 3
+            acumulador2.addAll(acumulador)
+            if (index != listaOrdenada.size || it != acumulador.first()) acumulador2.remove(it)
+            if(acumulador2.size == 1) return -1
+
+            when (acumulador2.size % 3) {
+                    0 -> rounds += acumulador2.size / 3
+                    1 -> rounds += (acumulador2.size + 2) / 3
+                    2 -> rounds += (acumulador2.size + 1) / 3
                 }
-                acumulador.clear()
-                acumulador.add(it)
+                acumulador.removeAll(acumulador2)
+                acumulador2.clear()
+            }
+
         }
-    }
-
-
-
+    if (acumulador.size == 1) return -1
     return rounds
 }
-
-
-
-
-
-
-//    listaOrdenada.forEach {
-//        index++
-//        if (acumulador.isEmpty()) {
-//            acumulador.add(it)
-//        } else if {
-//            if (it > acumulador.first()) {
-//                if (acumulador.size == 1) {
-//                    return -1
-//                } else {
-//                    when (acumulador.size % 3) {
-//                        0 -> rounds += acumulador.size / 3
-//                        1 -> rounds += (acumulador.size + 2) / 3
-//                        2 -> rounds += (acumulador.size + 1) / 3
-//                    }
-//                    acumulador.clear()
-//                    acumulador.add(it)
-//                }
-//            } else {
-//                acumulador.add(it)
-//            }
-//        } else {
-//            if (index == listaOrdenada.size ) acumulador.add(it)
-//        }
-//    }
-//    return rounds
-//}
