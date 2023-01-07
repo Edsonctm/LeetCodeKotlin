@@ -7,34 +7,26 @@ fun main(){
 }
 
 fun minimumRounds(tasks: IntArray): Int {
-    if(tasks.size == 1) return -1
+    val counts = HashMap<Int, Int>()
+    var result = 0
 
-    var index = 0
-    val acumulador = arrayListOf<Int>()
-    val acumulador2 = arrayListOf<Int>()
-    var rounds = 0
-    val listaOrdenada = tasks.sorted()
+    // Counts up each taskId
+    for (taskId in tasks) {
+        counts.put(taskId, (counts.get(taskId) ?: 0) + 1)
+    }
 
+    // Calculates the rounds
+    for (taskId in counts.keys) {
+        val taskCnt = counts.get(taskId) ?: 1
+        if (taskCnt == 1) return -1
 
-    listaOrdenada.forEach {
-        index++
-        acumulador.add(it)
-        if(it != acumulador.first() || index == listaOrdenada.size){
-
-            acumulador2.addAll(acumulador)
-            if (index != listaOrdenada.size || it != acumulador.first()) acumulador2.remove(it)
-            if(acumulador2.size == 1) return -1
-
-            when (acumulador2.size % 3) {
-                    0 -> rounds += acumulador2.size / 3
-                    1 -> rounds += (acumulador2.size + 2) / 3
-                    2 -> rounds += (acumulador2.size + 1) / 3
-                }
-                acumulador.removeAll(acumulador2)
-                acumulador2.clear()
-            }
-
+        val div2 = (taskCnt / 2) + (taskCnt % 2)
+        val div3 = (taskCnt / 3) + when(taskCnt % 3) {
+            0 -> 0
+            else -> 1
         }
-    if (acumulador.size == 1) return -1
-    return rounds
+        result += minOf(div2, div3)
+    }
+
+    return result
 }
