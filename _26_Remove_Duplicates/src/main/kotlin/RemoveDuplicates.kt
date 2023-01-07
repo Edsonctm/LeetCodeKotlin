@@ -5,15 +5,14 @@ fun main(){
 }
 
 fun removeDuplicates(nums: IntArray): Int {
-    val result = arrayListOf<Int>()
+    var index = 0
+    var valorUnico = nums[index]
 
     nums.forEach {
-        if (result.isEmpty()) result.add(it)
-        if (it > result.last()) {
-            result.add(it)
-            nums[result.size -1] = it
+        if (it > valorUnico) {
+            valorUnico = it
+            nums[++index] = it
         }
     }
-
-    return result.size
+    return index + 1
 }
